@@ -1,6 +1,7 @@
 import sender_stand_request
 import data
 
+
 # эта функция меняет значения в параметре firstName
 def get_user_body(first_name):
     # копирование словаря с телом запроса из файла data, чтобы не потерять данные в исходном словаре
@@ -9,6 +10,7 @@ def get_user_body(first_name):
     current_body["firstName"] = first_name
     # возвращается новый словарь с нужным значением firstName
     return current_body
+
 
 # Функция для позитивной проверки
 def positive_assert(first_name):
@@ -32,6 +34,7 @@ def positive_assert(first_name):
     # Проверка, что такой пользователь есть, и он единственный
     assert users_table_response.text.count(str_user) == 1
 
+
 # Функция для негативной проверки
 def negative_assert_symbol(first_name):
     user_body = get_user_body(first_name)
@@ -41,12 +44,14 @@ def negative_assert_symbol(first_name):
     assert response.json()["code"] == 400
     assert response.json()["message"] == "Имя пользователя введено некорректно. Имя может содержать только русские или латинские буквы, длина должна быть не менее 2 и не более 15 символов"
 
+
 def negative_assert_no_first_name(user_body):
     response = sender_stand_request.post_new_user(user_body)
 
     assert response.status_code == 400
     assert response.json()["code"] == 400
     assert response.json()["message"] == "Не все необходимые параметры были переданы"
+
 
 # Тест 1. Успешное создание пользователя
 # Параметр fisrtName состоит из 2 символов
@@ -114,6 +119,7 @@ def test_create_user_empty_first_name_get_error_response():
     # Проверка полученного ответа
     negative_assert_no_first_name(user_body)
 
+
 # Тест 12. Ошибка
 # Тип параметра firstName: число
 def test_create_user_number_type_first_name_get_error_response():
@@ -124,9 +130,3 @@ def test_create_user_number_type_first_name_get_error_response():
 
     # Проверка кода ответа
     assert response.status_code == 400
-
-
-
-
-
-
